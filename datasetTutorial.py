@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import os
 import cv2
 
-DATADIR = "C:/Users/Tobias/CNN/Images"
-CATEGORIES = ["Hallplats", "Johan", "Rulltrappa", "Tobias", "Trafik"]
+DATADIR = "C:/path/to/your/Images"
+CATEGORIES = ["A", "B", "C", "D", "E"]
 
 for category in CATEGORIES:
     path = os.path.join(DATADIR, category) # path to johan and tobias voices
