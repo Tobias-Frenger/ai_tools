@@ -1,3 +1,8 @@
+#######################################
+#   @Original_author: sentdex: https://youtu.be/j-3vuBynnOE
+#   @Edited_by: Tobias
+#######################################
+
 import numpy as np
 import matplotlib.pyplot as plt
 import os
