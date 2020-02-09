@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import os
 import cv2
 
-DATADIR = "C:/path/to/your/Images"
-CATEGORIES = ["A", "B", "C", "D", "E"]
+DATADIR = "C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset"
+CATEGORIES = ["knight", "orc", "sorceress"]
 
 for category in CATEGORIES:
     path = os.path.join(DATADIR, category) # path to img class folder
@@ -18,7 +18,7 @@ for category in CATEGORIES:
         img_array = cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB)
 
 IMG_SIZE = 128
-#plt.imshow(new_arr)
+#plt.imshow(img_array)
 #plt.show()
 
 training_data = []
@@ -53,22 +53,24 @@ y = []
 for features, label in training_data:
     X.append(features)
     y.append(label)
-    
+
+
 X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 3)
 
+#y = np.array(y).reshape(-1,len(y))
 import pickle
 # SAVE train_x, train_y
-pickle_out = open("C:/Users/Tobias/CNN/training_set_X.pickle", "wb")
+pickle_out = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_X.pickle", "wb")
 pickle.dump(X, pickle_out)
 pickle_out.close()
-pickle_out = open("C:/Users/Tobias/CNN/training_set_y.pickle", "wb")
+pickle_out = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_y.pickle", "wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
 
 # LOAD train_x, train_y
-pickle_in = open("C:/Users/Tobias/CNN/training_set_X.pickle", "rb")
+pickle_in = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_X.pickle", "rb")
 X = pickle.load(pickle_in)
-
-pickle_in = open("C:/Users/Tobias/CNN/training_set_y.pickle", "rb")
+X[0]
+pickle_in = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_y.pickle", "rb")
 y = pickle.load(pickle_in)
 y[0]
