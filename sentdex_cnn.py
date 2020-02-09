@@ -2,7 +2,7 @@
 """
 Created on Sun Feb  9 21:21:55 2020
 
-@author: Tfren
+@author: Tobias
 """
 
 import tensorflow as tf
@@ -17,11 +17,11 @@ import os
 from glob import glob
 # LOAD train_x, train_y
 #Training data
-pickle_in = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_X.pickle", "rb")
+pickle_in = open("C:/path-to-training-set/training_set_X.pickle", "rb")
 X = pickle.load(pickle_in)
 
 #Answers to training data
-pickle_in = open("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/training_set_y.pickle", "rb")
+pickle_in = open("C:/path-to-training-set-facit/training_set_y.pickle", "rb")
 y = pickle.load(pickle_in)
 
 #Normalize data -- scale the data
@@ -59,7 +59,7 @@ print(X.shape, X.dtype)
 print(y.shape, y.dtype)
 
 #only save the best model based on what is being monitored
-checkpoint = ModelCheckpoint("C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/best_model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
+checkpoint = ModelCheckpoint("C:/where-to-save-model-weights/best_model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
 
 history = model.fit(X, y, batch_size=16, validation_split=0.15, epochs = 75, callbacks=[checkpoint])
 
@@ -80,7 +80,7 @@ def show(history):
 show(history.history)
 
 #PREDICT A SINGLE IMAGE
-img = cv2.imread('C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/orc/orc_41.jpg', cv2.IMREAD_UNCHANGED)
+img = cv2.imread('C:/image-dir/img.jpg', cv2.IMREAD_UNCHANGED)
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 dim = (128,128)
@@ -132,30 +132,30 @@ def predict_image(model, image, target):
     img_resized = tf.cast(img_resized, tf.float32)
 
     y_prob = model.predict(img_resized)
-    knight = np.array([[1.,0.,0.]])
-    orc = np.array([[0.,1.,0.]])
-    sorceress = np.array([[0.,0.,1.]])
+    class1 = np.array([[1.,0.,0.]])
+    Class2 = np.array([[0.,1.,0.]])
+    Class3 = np.array([[0.,0.,1.]])
     
     if (np.array_equal(y_prob, knight) or (y_prob.item(0) > y_prob.item(1) and y_prob.item(2))):
-        if (target == "knight"):
+        if (target == "class1"):
             incrementTot()
-            print("Knight " + str(y_prob))
+            print("Class1 " + str(y_prob))
         else:
             print("ERROR - " + str(y_prob) + " - wrong prediction")
             incrementTot()
             incrementError()
     elif(np.array_equal(y_prob, orc) or (y_prob.item(0) and y_prob.item(2) < y_prob.item(1))):
-        if (target == "orc"):
+        if (target == "class2"):
             incrementTot()
-            print("Orc " + str(y_prob))
+            print("Class2 " + str(y_prob))
         else:
             print("ERROR - " + str(y_prob) + " - wrong prediction")
             incrementTot()
             incrementError()
     elif(np.array_equal(y_prob, sorceress) or (y_prob.item(1) and y_prob.item(0) < y_prob.item(2))):
-        if (target == "sorceress"):
+        if (target == "class3"):
             incrementTot()
-            print("Sorceress " + str(y_prob))
+            print("Class3 " + str(y_prob))
         else:
             print("ERROR - " + str(y_prob) + " - wrong prediction")
             incrementTot()
@@ -163,40 +163,37 @@ def predict_image(model, image, target):
     else:
         print("elif did not work")
 
-def printResultsOnKnight(model):
-    Data_dir=np.array(glob('C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/knight/*'))
-    #data_dir = pathlib.Path('C:/Users/Tobias/CNN/Images/Johan/')
+def printResultsOnClass1(model):
+    Data_dir=np.array(glob('C:/path-to-first-class/class1/*'))
     i = 0
     for images in Data_dir[i:i+2000]:
         i+=1
-        predict_image(model, images, "knight")
+        predict_image(model, images, "class1")
     errorRate = getError()/getTot()
     print ("Prediction error: " + str(errorRate))
 
-def printResultsOnOrc(model):
-    Data_dir=np.array(glob('C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/orc/*'))
-    #data_dir = pathlib.Path('C:/Users/Tobias/CNN/Images/Johan/')
+def printResultsOnClass2(model):
+    Data_dir=np.array(glob('C:/path-to-second-class/class2/*'))
     i = 0
     for images in Data_dir[i:i+2000]:
         i+=1
-        predict_image(model, images, "orc")
+        predict_image(model, images, "class2")
     errorRate = getError()/getTot()
     print ("Prediction error: " + str(errorRate))
     
-def printResultsOnSorceress(model):
-    Data_dir=np.array(glob('C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset/sorceress/*'))
-    #data_dir = pathlib.Path('C:/Users/Tobias/CNN/Images/Johan/')
+def printResultsOnClass3(model):
+    Data_dir=np.array(glob('C:/path-to-third-class/class3/*'))
     i = 0
     for images in Data_dir[i:i+2000]:
         i+=1
-        predict_image(model, images, "sorceress")
+        predict_image(model, images, "class3")
     errorRate = getError()/getTot()
     print ("Prediction error: " + str(errorRate))
 
 resetErrorRate()
-print("Knight")
-printResultsOnKnight(model)
-print("Orc")
-printResultsOnOrc(model)
-print("Sorceress")
-printResultsOnSorceress(model)
+print("Class1")
+printResultsOnClass1(model)
+print("Class2")
+printResultsOnClass2(model)
+print("Class3")
+printResultsOnClass3(model)
