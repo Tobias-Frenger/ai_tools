@@ -14,7 +14,7 @@ DATADIR = "C:/path/to/your/Images"
 CATEGORIES = ["A", "B", "C", "D", "E"]
 
 for category in CATEGORIES:
-    path = os.path.join(DATADIR, category) # path to johan and tobias voices
+    path = os.path.join(DATADIR, category) # path to img class folder
     for img in os.listdir(path):
         img_array = cv2.imread(os.path.join(path,img))
         img_array = cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB)
@@ -26,7 +26,7 @@ IMG_SIZE = 128
 training_data = []
 def create_training_data():
     for category in CATEGORIES:
-        path = os.path.join(DATADIR, category) # path to johan and tobias voices
+        path = os.path.join(DATADIR, category) # path to img class folder
         class_num = CATEGORIES.index(category)
         for img in os.listdir(path):
             try:
