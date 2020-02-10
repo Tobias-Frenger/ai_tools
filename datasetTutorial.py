@@ -9,7 +9,7 @@ import os
 import cv2
 
 DATADIR = "C:/Users/Tfren/Desktop/NeuralNetworks/magic_dataset"
-CATEGORIES = ["knight", "orc", "sorceress"]
+CATEGORIES = ["Class1", "Class2", "Class3"]
 
 for category in CATEGORIES:
     path = os.path.join(DATADIR, category) # path to img class folder
