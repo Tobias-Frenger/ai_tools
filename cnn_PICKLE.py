@@ -300,7 +300,7 @@ for image in Data_dir[:10]:
     img = cv2.imread(image, cv2.IMREAD_UNCHANGED)
     #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     dim = (128,128)
-    
+    img_orig = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_tensor = cv2.resize(img, dim, interpolation = cv2.INTER_CUBIC)
     
     img_tensor = np.expand_dims(img_tensor, axis=0)
@@ -332,7 +332,8 @@ for image in Data_dir[:10]:
         max_heat = 1e-10
     heatmap /= max_heat
     
-    plt.matshow(heatmap)
+    heatmap_img = cv2.applyColorMap(img_orig, cv2.COLORMAP_JET)
+    plt.matshow(heatmap_img)
     plt.show()
     
     
