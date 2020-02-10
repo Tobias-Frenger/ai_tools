@@ -70,9 +70,11 @@ print(test_x.shape, train_x.dtype)
 print(test_y.shape, train_y.dtype)
 
 #only save the best model based on what is being monitored
-checkpoint = ModelCheckpoint("C:/where-to-save-model-weights/best_model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
+checkpoint_loss = ModelCheckpoint("C:/where-to-save-model-weights/{epoch:02d}-{loss:.2f}_best_model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
+checkpoint_val_loss = ModelCheckpoint("C:/where-to-save-model-weights/{epoch:02d}-{val_loss:.2f}_best_val_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
+reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.1, patience=10, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0.001)
 
-history = model.fit(X, y, batch_size=16, validation_split=0.15, epochs = 75, callbacks=[checkpoint])
+history = model.fit(train_x, train_y, batch_size=16, validation_split=0.15, epochs = 10, callbacks=[checkpoint_loss, checkpoint_val_loss, reduce_lr])
 
 def show(history):
     val_acc = history['val_accuracy']
