@@ -95,6 +95,7 @@ print(y_prob)
 
 
 # PRINT AND EVALUATE THE ERROR RATE OF THE TRAINING SET
+model.load_weights('C:/-path-to-save/file.h5'
 tot = 0
 error = 0
 def incrementTot():
