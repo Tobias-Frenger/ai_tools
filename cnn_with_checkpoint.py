@@ -89,6 +89,7 @@ img_resized = cv2.resize(img_rgb, dim, interpolation = cv2.INTER_CUBIC)
 
 img_resized = np.expand_dims(img_resized, axis=0)
 img_resized = tf.cast(img_resized, tf.float32)
+img_resized = img_resized/255
 y_prob = model.predict(img_resized)
 
 print(y_prob)
