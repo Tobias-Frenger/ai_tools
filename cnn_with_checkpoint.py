@@ -15,18 +15,26 @@ import cv2
 import matplotlib.pyplot as plt
 import os
 from glob import glob
-# LOAD train_x, train_y
-#Training data
+
+#TRAINING DATA
 pickle_in = open("C:/path-to-training-set/training_set_X.pickle", "rb")
 X = pickle.load(pickle_in)
-
 #Answers to training data
 pickle_in = open("C:/path-to-training-set-facit/training_set_y.pickle", "rb")
 y = pickle.load(pickle_in)
 
+#TEST DATA
+pickle_in = open("C:/path-to-trest-set/test_set_X.pickle", "rb")
+test_x = pickle.load(pickle_in)
+#Answers to training data
+pickle_in = open("C:/path-to-test-set-facit/test_set_y.pickle", "rb")
+test_y = pickle.load(pickle_in)
+
 #Normalize data -- scale the data
-X = X/255.0
-print(X.shape)
+train_x = train_x/255.0
+test_x = test_x/255.0
+print(train_x.shape)
+print(test_x.shape)
 
 model = Sequential()
 #layer_1
@@ -36,27 +44,30 @@ model.add(MaxPooling2D(pool_size=(2,2), strides=2, padding="valid"))
 #Layer_2
 model.add(Conv2D(128, kernel_size=3, strides=1,))
 model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size=(2,2), strides=2, padding="valid"))
+#model.add(MaxPooling2D(pool_size=(2,2), strides=2, padding="valid"))
 #layer_3
-model.add(Conv2D(64, kernel_size=3, strides=1))
-model.add(BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001))
-model.add(Activation("relu"))
+#model.add(Conv2D(64, kernel_size=3, strides=1))
+#model.add(BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001))
+#model.add(Activation("relu"))
 #layer_4
 model.add(Flatten())
 model.add(Dense(64))
 model.add(BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001))
 #Output_layer
 model.add(Dropout(0.6))
-model.add(Dense(3))
+model.add(Dense(5))
 model.add(BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001))
 model.add(Activation('softmax'))
 
 model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
 
 #train_dataset = tf.data.Dataset.from_tensor_slices((X, y))
-y = np.array(y)
-print(X.shape, X.dtype)
-print(y.shape, y.dtype)
+train_y = np.array(train_y)
+test_y = np.array(test_y)
+print(train_x.shape, train_x.dtype)
+print(train_y.shape, train_y.dtype)
+print(test_x.shape, train_x.dtype)
+print(test_y.shape, train_y.dtype)
 
 #only save the best model based on what is being monitored
 checkpoint = ModelCheckpoint("C:/where-to-save-model-weights/best_model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
@@ -78,6 +89,8 @@ def show(history):
     plt.show()
 
 show(history.history)
+#EVALUATE ON TEST SET
+model.evaluate(test_x, test_y, batch_size=16, verbose=2)
 
 #PREDICT A SINGLE IMAGE
 img = cv2.imread('C:/image-dir/img.jpg', cv2.IMREAD_UNCHANGED)
@@ -132,7 +145,8 @@ def predict_image(model, image, target):
     img_resized = cv2.resize(img, dim, interpolation = cv2.INTER_CUBIC)
     img_resized = np.expand_dims(img_resized, axis=0)
     img_resized = tf.cast(img_resized, tf.float32)
-
+    img_resized = img_resized/255
+    
     y_prob = model.predict(img_resized)
     class1 = np.array([[1.,0.,0.]])
     Class2 = np.array([[0.,1.,0.]])
