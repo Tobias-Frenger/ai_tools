@@ -3,7 +3,7 @@
 Created on Sun Feb  9 21:21:55 2020
 @author: Tobias
 """
-im="D:/your/image/location/17.jpg"
+im="C:/your/image/location/17.jpg"
 
 image = cv2.imread(im, cv2.IMREAD_UNCHANGED)
 dim = (128,128)
