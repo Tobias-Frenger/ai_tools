@@ -3,14 +3,14 @@
 Created on Sun Feb  9 21:21:55 2020
 @author: Tobias
 """
-
-im="C:/your/img/location/11.jpg"
+im="D:/catsANDdogs/PetImages/Cat/17.jpg"
 
 image = cv2.imread(im, cv2.IMREAD_UNCHANGED)
 dim = (128,128)
 
 img_tensor = cv2.resize(image, dim, interpolation = cv2.INTER_CUBIC)
-
+#img_tensor = cv2.cvtColor(img_tensor, cv2.COLOR_BGR2RGB)
+plt.imshow(img_tensor)
 img_tensor = tf.cast(img_tensor, tf.float32)
 img_tensor = img_tensor/255.
 
@@ -48,9 +48,12 @@ heatmap /= max_heat
 heatmap = reshape(heatmap, (8,8), 3)
 plt.imshow(heatmap)
 
+#Restore image dimensions
+#image[:,:, 1].shape[1] -->> Corresponds to the y-axis of the img dimensions,
+#image[:,:, 1].shape[0] -->> Corresponds to the x-axis of the img dimensions
 heatmap = np.expand_dims(heatmap,axis=-1)
-upsample = cv2.resize(heatmap, (128,128), 3)
-print(upsample.shape)
+upsample = cv2.resize(heatmap, (image[:,:, 1].shape[1],image[:,:, 1].shape[0]), 3)
+
 plt.imshow(image)
 plt.imshow(upsample,alpha=0.5)
 plt.show()
