@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Feb  9 21:21:55 2020
+@author: Tobias
+"""
+
+im="D:/catsANDdogs/PetImages/Dog/11.jpg"
+
+image = cv2.imread(im, cv2.IMREAD_UNCHANGED)
+dim = (128,128)
+
+img_tensor = cv2.resize(image, dim, interpolation = cv2.INTER_CUBIC)
+
+img_tensor = tf.cast(img_tensor, tf.float32)
+img_tensor = img_tensor/255.
+
+
+print(img_tensor.shape)
+def preprocess(img):
+    img = tf.keras.preprocessing.image.img_to_array(img)
+    img = np.expand_dims(img,axis=0)
+    return img
+
+image_1 = preprocess(img_tensor)
+print(image_1.shape)
+predict = three_layer_cnn.predict(image_1)
+
+target_class = np.argmax(predict[0])
+print("Target Class = %d"%target_class)
+
+last_conv = three_layer_cnn.get_layer("conv2d_2")
+heatmap_model = models.Model([three_layer_cnn.inputs], [last_conv.output, three_layer_cnn.output])
+with tf.GradientTape() as tape:
+    conv_output, predictions = heatmap_model(image_1)
+    loss = predictions[:, np.argmax(predictions[0])]
+    preds = three_layer_cnn(image_1)
+    grads = tape.gradient(loss, conv_output)
+    pooled_grads = K.mean(grads,axis=(0,1,2))
+
+heatmap = tf.reduce_mean(tf.multiply(pooled_grads, conv_output), axis=-1)
+
+heatmap = np.maximum(heatmap,0)
+max_heat = np.max(heatmap)
+if max_heat == 0:
+    max_heat = 1e-10
+heatmap /= max_heat
+
+heatmap = reshape(heatmap, (8,8), 3)
+plt.imshow(heatmap)
+
+heatmap = np.expand_dims(heatmap,axis=-1)
+upsample = cv2.resize(heatmap, (128,128), 3)
+print(upsample.shape)
+plt.imshow(image)
+plt.imshow(upsample,alpha=0.5)
+plt.show()
