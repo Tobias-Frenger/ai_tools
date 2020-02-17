@@ -1,0 +1,77 @@
+def CNN_Res_Model():
+    
+    inputs = tf.keras.Input(shape=(128,128,3))
+    
+    #Layer_1
+    conv = Conv2D(128, kernel_size=11, strides=1, padding = 'same', input_shape = (128,128,3))
+    X = conv(inputs) #first cnn layer
+    X_shortcut = X #Saving the inputs from this layer in X_shorcut
+    X = BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001)(X)
+    X = Activation("relu")(X)
+    #Layer_2
+    X = Conv2D(128, kernel_size=5, strides=1, padding = 'same')(X)  #second cnn layer
+    X = BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001)(X)
+    X = Activation("relu")(X)
+    #Adding shortcut_value to main path
+    X = Add()([X, X_shortcut])  # output from first cnn layer and second cnn layer
+    X = BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001)(X)
+    X = Activation("relu")(X)
+    #Layer_3
+    X = Conv2D(128, kernel_size=3, strides=1, padding = 'valid')(X)
+    X = BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001)(X)
+    X = Activation("relu")(X)
+    X = MaxPooling2D(pool_size=(3,3), strides=3, padding="valid")(X)
+    X = Flatten()(X)
+    X = Dense(128)(X)
+    X = Dropout(0.8)(X)
+    outputs = Dense(2)(X)
+    model = tf.keras.Model(inputs = inputs, outputs=outputs, name='residual_model')
+    model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
+    model.summary()
+    return model
+   # model.summary()
+
+#my_model = CNN_Res_Model()
+
+
+def CNN_Model():
+    model = Sequential()
+    #layer_1
+    model.add(Conv2D(64, kernel_size=11, strides=1, padding = 'same', input_shape = (128,128,3)))
+#    model.add(BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(3,3), strides=3, padding="valid"))
+    #Layer_2
+    model.add(Conv2D(128, kernel_size=5, strides=1, padding = 'same'))
+    model.add(BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(3,3), strides=3, padding="valid"))
+    #layer_3
+    model.add(Conv2D(128, kernel_size=3, strides=1, padding = 'valid'))
+#    model.add(Conv2D(128, kernel_size=3, strides=1, padding = 'valid'))
+#    model.add(BatchNormalization(axis=-1, momentum=0.85, epsilon=0.001))
+#    model.add(Activation("relu"))
+#    model.add(MaxPooling2D(pool_size=(2,2), strides=2, padding="valid"))
+    #Layer_4
+#    model.add(Conv2D(32, kernel_size=1, strides=1, padding = 'valid'))
+#    model.add(BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001))
+    #Layer_5
+#    model.add(Conv2D(128, kernel_size=5, strides=1, padding = 'valid'))
+#    model.add(BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001))
+#    model.add(Activation("relu"))
+#    model.add(MaxPooling2D(pool_size=(2,2), strides=2, padding="valid"))
+    #layer_6
+    model.add(Flatten())
+    model.add(Dense(128))
+#    model.add(BatchNormalization(axis=-1, momentum=0.82, epsilon=0.001))
+    #Output_layer
+    model.add(Dropout(0.8))
+    model.add(Dense(2))
+    #model.add(BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001))
+    model.add(Activation('softmax'))
+    
+    model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
+    return model
+
+three_layer_cnn = CNN_Res_Model()
+tf.keras.utils.plot_model(three_layer_cnn, 'my_first_model_with_shape_info.png', show_shapes=True)
