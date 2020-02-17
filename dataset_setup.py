@@ -58,7 +58,7 @@ for sample in training_data[:20]:
     
 train_x = []
 train_y = []
-
+#PRINT 20 SAMPLE TO SEE THE RESULT
 for sample in test_data[:20]:
     print(sample[1])
     
