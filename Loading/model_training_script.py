@@ -36,6 +36,7 @@ class callback_history(tf.keras.callbacks.Callback):
         plt.plot(batch, loss, 'r', label='Training loss')
         plt.plot(batch, val_acc, 'b', label='Validation acc')
         plt.plot(batch, val_loss, 'c', label='Validation loss')
+        plt.ylim(top=1.5, bottom=0.0)
         plt.legend()
         plt.show()
         
