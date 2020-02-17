@@ -86,6 +86,13 @@ pickle_out.close()
 pickle_out = open("C:/Users/You/Your/Save/Location/training_set_y.pickle", "wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()
+# Save test_x, test_y
+pickle_out = open("C:/Users/Tobias/CNN/test_set_X.pickle", "wb")
+pickle.dump(test_x, pickle_out)
+pickle_out.close()
+pickle_out = open("C:/Users/Tobias/CNN/test_set_y.pickle", "wb")
+pickle.dump(test_y, pickle_out)
+pickle_out.close()
 
 # LOADING EXAMPLE #############################################################################
 # LOAD train_x, train_y
