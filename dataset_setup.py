@@ -27,7 +27,7 @@ training_data = []
 test_data = []
 def create_training_and_test_data():
     count = 1
-    ten = 10
+    mod = 5
     for category in CATEGORIES:
         path = os.path.join(DATADIR, category) # path to johan and tobias voices
         class_num = CATEGORIES.index(category)
@@ -36,7 +36,7 @@ def create_training_and_test_data():
                 img_array = cv2.imread(os.path.join(path,img))
                 img_array = cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB)
                 new_arr = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
-                if (np.equal(count % ten, 0)):
+                if (np.equal(count % 5, 0)):
                     test_data.append([new_arr, class_num])
                 else:
                     training_data.append([new_arr, class_num])
