@@ -14,11 +14,6 @@ import numpy as np
 
 #import matplotlib.pyplot as plt
 
-cnn_1 = ''
-cnn_2 = ''
-inception_v3 = ''
-inception_resnet_v2 = ''
-
 class callback_history(tf.keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.acc = []
