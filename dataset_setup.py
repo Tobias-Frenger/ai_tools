@@ -14,7 +14,7 @@ DATADIR = "C:/Users/You/Your/Path/To/Dataset"
 CATEGORIES = ["Class1", "Class2", "Class3"]
 
 for category in CATEGORIES:
-    path = os.path.join(DATADIR, category) # path to johan and tobias voices
+    path = os.path.join(DATADIR, category)
     for img in os.listdir(path):
         img_array = cv2.imread(os.path.join(path,img))
         img_array = cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB)
