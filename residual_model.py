@@ -29,17 +29,17 @@ from tensorflow.keras.layers import Activation
 get_custom_objects().update({'swish': Activation(swish)})
 
 #TRAINING DATA
-pickle_in = open("C:/Users/Tobias/CNN/Thesis_Models/Saved_Datasets/Boats/training_set_X.pickle", "rb")
+pickle_in = open("C:/location_to_training_data/training_set_X.pickle", "rb")
 train_x = pickle.load(pickle_in)
 #Answers to training data
-pickle_in = open("C:/Users/Tobias/CNN/Thesis_Models/Saved_Datasets/Boats/training_set_y.pickle", "rb")
+pickle_in = open("C:/location_to_training_data/training_set_y.pickle", "rb")
 train_y = pickle.load(pickle_in)
 
 #TEST DATA
-pickle_in = open("C:/Users/Tobias/CNN/Thesis_Models/Saved_Datasets/Boats/test_set_X.pickle", "rb")
+pickle_in = open("C:/location_to_test_data/test_set_X.pickle", "rb")
 test_x = pickle.load(pickle_in)
 #Answers to training data
-pickle_in = open("C:/Users/Tobias/CNN/Thesis_Models/Saved_Datasets/Boats/test_set_y.pickle", "rb")
+pickle_in = open("C:/location_to_test_data/test_set_y.pickle", "rb")
 test_y = pickle.load(pickle_in)
 
 #Normalize data -- scale the data
@@ -110,20 +110,20 @@ def res_model():
 
 res_model = res_model()
 res_model.summary()
-res_model.save("C:/Users/Tobias/CNN/Thesis_Models/res_model/" + res_model.name + ".hdf5")
+res_model.save("C:/save_location_of_the_model/" + res_model.name + ".hdf5")
 #DISPLAY MODEL STRUCTURE
 tf.keras.utils.plot_model(res_model, 'my_first_model_with_shape_info.png', show_shapes=True)
 #res_model.metrics_names
 #PREPARE TRAINING
-checkpoint_loss = ModelCheckpoint('C:/Users/Tobias/CNN/Thesis_Models/' + str(res_model.name) + '/saved_models/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_model.hdf5', monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
-checkpoint_val_loss = ModelCheckpoint('C:/Users/Tobias/CNN/Thesis_Models/' + str(res_model.name) + '/saved_models/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_val_model.hdf5', monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
+checkpoint_loss = ModelCheckpoint('C:/location_dir_to_model_name_folder/' + str(res_model.name) + '/saved_models/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_model.hdf5', monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
+checkpoint_val_loss = ModelCheckpoint('C:/location_dir_to_model_name_folder/' + str(res_model.name) + '/saved_models/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_val_model.hdf5', monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
 reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.1, patience=10, verbose=0, mode='auto', min_delta=0.0001, cooldown=0, min_lr=0.001)
 #TRAIN THE MODEL AND STORE THE RESULTS
 history = res_model.fit(train_x, train_y, batch_size=16, validation_split=0.10, epochs = 10, callbacks=[checkpoint_loss, checkpoint_val_loss, reduce_lr])
 
 #USE FOR LATER
 #from model_training_script import train_model
-#history = train_model('C:/Users/Tobias/CNN/Thesis_Models/res_model/' + res_model.name + '.hdf5', train_x, train_y)
+#history = train_model('C:/location_dir_to_model_name_folder/' + str(res_model.name) + '/' + res_model.name + '.hdf5', train_x, train_y)
 
 #SHOW TRAINING RESULTS
 def show(history):
@@ -144,20 +144,19 @@ def show(history):
 show(history.history)
 
 #MODEL EVALUATION
-res_model.load_weights('C:/Users/Tobias/CNN/res_model_06-0.50_best_val_model.hdf5')
+res_model.load_weights('C:/location_to_stored_model/res_model_06-0.50_best_val_model.hdf5')
 res_model.evaluate(test_x, test_y, batch_size=32, verbose=2)
 
 #VALIDATION OF RESULTS
 #Heatmap
-res_model.summary()
+res_model.summary() #Use this to find which layer to check with the heatmap
 from grad_cam import grad_cam
-#IMAGE = 'C:/Users/Tobias/CNN/Labbdata_spectrogram_2500ms/Sub/Red_Hat1-3145.jpg'
-IMAGE = 'C:/Users/Tobias/CNN/Labbdata_spectrogram_2500ms/Tugboat/Tugboat1-340112.jpg'
-#IMAGE = 'C:/Users/Tobias/CNN/Images/Trafik/trafik_tva_43.jpg'
-layer_name = "conv2d_20"
+
+IMAGE = 'C:/location_to_your_image/Tugboat1-340112.jpg'
+layer_name = "your_layer_name"
 alpha=0.9
 grad_cam(res_model, layer_name, IMAGE, alpha)
-#Print with alpha 0.5 and alpha 1.0
+#Print with alpha 1.0, 0.5, and alpha 0.0
 def printHMvariations(layer, img):
     IMG = cv2.imread(img, cv2.IMREAD_UNCHANGED)
     IMG = cv2.cvtColor(IMG, cv2.COLOR_BGR2RGB)
@@ -172,6 +171,7 @@ def printHMvariations(layer, img):
 
 printHMvariations(layer_name, IMAGE)
 
+#display single image
 def displayImage(img):
     IMG = cv2.imread(img, cv2.IMREAD_UNCHANGED)
     IMG = cv2.cvtColor(IMG, cv2.COLOR_BGR2RGB)
