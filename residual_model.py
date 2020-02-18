@@ -73,30 +73,12 @@ def residual_block(X, filters):
     X = common_layers(X)
     return X
 
-
-    #X = Add()([shortcut, X]) # see if this works
-def res_block_A(X, filters):
-    shortcut_X = X
-    shortcut_X = MaxPooling2D(2,2,padding="valid")(shortcut_X)
-    L0 = conv_block(X, 32, 5, 1)
-    L1 = conv_block(X, 32, 3, 1)
-    L2 = conv_block(X, 64, 1, 1)
-    X = tf.keras.layers.concatenate([L0,L1,L2], axis=3)
-    #X = conv_block(X, 128, 3, 1)
-    X = Add()([X, shortcut_X])
-    X = Activation("relu")(X)
-    return X
-
-def pooling_block(X, pool_size, strides):
-    X = MaxPooling2D(pool_size = pool_size, strides = strides, padding = "valid")(X)
-    return X
-
 def res_model():
     inputs = tf.keras.Input(shape=(128,128,3))
     X = Conv2D(24, 1, 1, padding='same')(inputs)
     X = maxPool_layer(X, 3, 3)
     X = residual_block(X, 24)
-    X = (Conv2D(16, 3, 3, padding='same'))
+    X = Conv2D(16, 3, 3, padding='same')(X)
     X = maxPool_layer(X, 3, 3)
     X = Flatten()(X)
     outputs = Dense(5)(X)
