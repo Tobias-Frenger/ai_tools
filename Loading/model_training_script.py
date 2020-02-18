@@ -41,7 +41,7 @@ class callback_history(tf.keras.callbacks.Callback):
         self.b_loss.append(logs.get('loss'))
         acc = self.b_acc
         loss = self.b_loss
-        batch = range(len(self.acc))
+        batch = range(len(self.b_acc))
         plt.plot(batch, acc, 'g', label='Training acc')
         plt.plot(batch, loss, 'r', label='Training loss')
         plt.ylim(top=1.5, bottom=0.0)
@@ -61,11 +61,11 @@ class callback_history(tf.keras.callbacks.Callback):
         loss = self.e_loss
         val_loss = self.e_val_loss
         val_acc = self.e_val_acc
-        batch = range(len(self.acc))
-        plt.plot(batch, acc, 'g', label='Training acc')
-        plt.plot(batch, loss, 'r', label='Training loss')
-        plt.plot(batch, val_acc, 'b', label='Validation acc')
-        plt.plot(batch, val_loss, 'c', label='Validation loss')
+        epoch = range(len(self.e_acc))
+        plt.plot(epoch, acc, 'g', label='Training acc')
+        plt.plot(epoch, loss, 'r', label='Training loss')
+        plt.plot(epoch, val_acc, 'b', label='Validation acc')
+        plt.plot(epoch, val_loss, 'c', label='Validation loss')
         plt.ylim(top=1.5, bottom=0.0)
         plt.legend()
         plt.show()
