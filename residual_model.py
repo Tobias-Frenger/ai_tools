@@ -4,7 +4,7 @@ Created on Mon Feb 17 17:25:33 2020
 
 @author: Tobias
 """
-
+#TODO --> Change padding to valid and calculate the new dimensions for the shortcut. Decrease shortcut dims by using avgpooling
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D, BatchNormalization, GlobalAveragePooling2D, Add
 from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.models import Sequential, Model
