@@ -19,7 +19,16 @@ import cv2
 import pydot
 import os
 
+### SWISH ###
+from tensorflow.keras.backend import sigmoid
 
+def swish(x, beta = 1):
+    return (x * sigmoid(beta*x))
+
+from tensorflow.keras.utils.generic_utils import get_custom_objects
+from tensorflow.keras.layers import Activation
+get_custom_objects().update({'swish': Activation(swish)})
+#############
 
 #TRAINING DATA
 pickle_in = open("C:/loc/to/your/dataset/training_set_X.pickle", "rb")
