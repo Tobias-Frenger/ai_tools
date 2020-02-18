@@ -102,7 +102,7 @@ def res_model():
     X = Conv2D(16, 3, 3, padding='same')(X)
     X = maxPool_layer(X, 3, 3)
     X = Flatten()(X)
-    outputs = Dense(5)(X)
+    X = Dense(5)(X)
     outputs = Activation("softmax")(X)
     model = tf.keras.Model(inputs = inputs, outputs = outputs, name ="res_model")
     model.compile(loss="sparse_categorical_crossentropy", optimizaer="adam", metrics=['accuracy'])
