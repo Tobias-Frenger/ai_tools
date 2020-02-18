@@ -42,49 +42,49 @@ train_y = np.array(train_y)
 test_y = np.array(test_y)
 
 
-def conv_block(X, filters, kernel_size, strides, lname):
-        X = Conv2D(filters, kernel_size=kernel_size, strides=strides, padding = 'same', name=lname)(X)
-        X = BatchNormalization(axis=-1, momentum=0.9, epsilon=0.001)(X)
-        X = Activation("relu")(X)
-        X = pooling_block(X, 2, 2)
-        return X
-
-def res_block_A(X, filters):
-    shortcut_X = X
-    shortcut_X = MaxPooling2D(2,2,padding="valid")(shortcut_X)
-    L0 = conv_block(X, 32, 5, 1, "conv_5")
-    L1 = conv_block(X, 32, 3, 1, "conv_3")
-    L2 = conv_block(X, 64, 1, 1, "conv_1")
-    X = tf.keras.layers.concatenate([L0,L1,L2], axis=3)
-    #X = conv_block(X, 128, 3, 1)
-    X = Add()([X, shortcut_X])
-    X = Activation("relu")(X)
+def conv_block(X, filters, kernel_size, strides):
+    X = Conv2D(filters, kernel_size=kernel_size, strides=strides, padding = 'same')(X)
+    X = common_layers(X)
+    return X
+    
+def common_layers(X):
+    X = BatchNormalization()(X)
+    X = tf.keras.layers.LeakyReLU()(X)
+    return X
+    
+def conv_layer(X, filters, kernel_size, strides):
+    X = Conv2D(filters, kernel_size=kernel_size, strides=strides, padding = 'same')(X)
     return X
 
-def pooling_block(X, pool_size, strides):
+def maxPool_layer(X, pool_size, strides):
     X = MaxPooling2D(pool_size = pool_size, strides = strides, padding = "valid")(X)
     return X
 
-def Residual_Model():
-    input_dims=(128,128,3)
+def residual_block(X, filters):
+    shortcut = X
+    X = conv_layer(X, filters, (1,1), 1)
+    X = conv_block(X, filters, (11,11), 1)
+    X = conv_layer(X, filters, (7,7), 1)
+    X = BatchNormalization()(X)
+    X = conv_layer(X, filters, (5,5), 1)
+    X = Add()([shortcut, X])
+    X = common_layers(X)
+    return X
+
+def res_model():
     inputs = tf.keras.Input(shape=(128,128,3))
-    X = Conv2D(128, kernel_size=5, strides=3, padding = 'valid', input_shape=(input_dims), name='conv_0')(inputs)
-    #X = BatchNormalization(axis=-1, momentum=0.87, epsilon=0.001)(X)
-    X = Activation("relu")(X)
-    X = pooling_block(X, 3, 3)
-    X = res_block_A(X, 128)
-    X = conv_block(X, 64, 3, 3, "conv_final")
-    #X = pooling_block(X, 3, 3)
+    X = Conv2D(24, 1, 1, padding='same')(inputs)
+    X = maxPool_layer(X, 3, 3)
+    X = residual_block(X, 24)
+    X = maxPool_layer(X, 3, 3)
     X = Flatten()(X)
-    X = Dense(64)(X)
-    X = Dropout(0.4)(X)
     outputs = Dense(5)(X)
     outputs = Activation("softmax")(X)
-    model = tf.keras.Model(inputs = inputs, outputs = outputs, name='Simple_Residual_Model')
-    model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
+    model = tf.keras.Model(inputs = inputs, outputs = outputs, name ="res_model")
+    model.compile(loss="sparse_categorical_crossentropy", optimizaer="adam", metrics=['accuracy'])
     return model
 
-res_model = Residual_Model()
+res_model = res_model()
 #res_model.summary()
 res_model.save("C:/save/model/at/this/location/" + res_model.name + ".hdf5")
 #DISPLAY MODEL STRUCTURE
