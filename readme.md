@@ -1,2 +1,2 @@
 <b>Architecture of the residual based model</b>
-![](res_model.png)
+![](res_model3x3_residual_connections.png)
