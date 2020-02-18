@@ -1,2 +1,2 @@
-<b>Architecture of the inception-residual based model</b>
-![](residual_model.png)
+<b>Architecture of the residual based model</b>
+![](res_model.png)
