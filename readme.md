@@ -1,4 +1,4 @@
-<b>Architecture of the residual based model ~ 28k params</b>
+<b>Architecture of the simple inception-residual based model ~ 28k params</b>
 ![](inception_resnet_simple.png)
 
 <b>Architecture of the residual based model ~ 61k params</b>
