@@ -105,7 +105,7 @@ def res_model():
 
 res_model = res_model()
 #SAVE THE MODEL
-res_model.save("C:/location/".hdf5")
+res_model.save("C:/location/" + res_model.name + ".hdf5")
 #DISPLAY MODEL STRUCTURE
 tf.keras.utils.plot_model(res_model, 'my_first_model_with_shape_info.png', show_shapes=True)
 
