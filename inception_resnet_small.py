@@ -110,10 +110,10 @@ res_model.save("C:/location/".hdf5")
 tf.keras.utils.plot_model(res_model, 'my_first_model_with_shape_info.png', show_shapes=True)
 
 #PREPARE FOR TRAINING
-checkpoint_loss = ModelCheckpoint('C:/location/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_model.hdf5', monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
-checkpoint_val_loss = ModelCheckpoint('C:/location/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_val_model.hdf5', monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
+#checkpoint_loss = ModelCheckpoint('C:/location/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_model.hdf5', monitor='loss', verbose=1, save_best_only=True, mode='auto', period=1)
+#checkpoint_val_loss = ModelCheckpoint('C:/location/' + res_model.name + '_{epoch:02d}-{loss:.2f}_best_val_model.hdf5', monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
 #TRAIN THE MODEL AND STORE THE RESULTS
-history = res_model.fit(train_x, train_y, batch_size=16, validation_split=0.10, epochs = 10, callbacks=[checkpoint_loss, checkpoint_val_loss])
+#history = res_model.fit(train_x, train_y, batch_size=16, validation_split=0.10, epochs = 10, callbacks=[checkpoint_loss, checkpoint_val_loss])
 
 #TRAIN THE MODEL USING SCRIPT
 from model_training_script import train_model
