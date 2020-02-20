@@ -29,7 +29,7 @@ def create_training_and_test_data():
     count = 1
     mod = 5
     for category in CATEGORIES:
-        path = os.path.join(DATADIR, category) # path to johan and tobias voices
+        path = os.path.join(DATADIR, category)
         class_num = CATEGORIES.index(category)
         for img in os.listdir(path):
             try:
