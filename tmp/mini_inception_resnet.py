@@ -53,7 +53,4 @@ def init_model(in_dim, classes):
     return model
 
 model = init_model((128,128,3),5)
-model.summary()l3 = Conv2D(32, 1, 1, padding='same')(X)
-        l3 = common_layers(l3)
-        l3 = Conv2D(64, 3, 1, padding = 'same')(l3)
-        l3 = common_layers(l3)
+model.summary()
