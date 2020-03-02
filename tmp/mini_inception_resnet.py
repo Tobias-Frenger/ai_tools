@@ -51,6 +51,6 @@ def init_model(in_dim, classes):
     model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
     return model
 
-model = init_model()
+model = init_model((128,128,3),5)
 model.summary()
 tf.keras.utils.plot_model(model, model.name + '_architecture.jpg', show_shapes=True) # SET TO CORRECT PATH
