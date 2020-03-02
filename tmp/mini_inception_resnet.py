@@ -41,8 +41,6 @@ def init_model(in_dim, classes):
     X = common_layers(X)
     X = maxPool_layer(X, 3, 3)
     X = inception_residual_block(X, 64)
-    X = common_layers(X)
-    X = maxPool_layer(X, 3, 3)
     X = AveragePooling2D((3,3), 2)(X)
     X = Flatten()(X)
     X = Dense(classes, name="dense_out")(X)
