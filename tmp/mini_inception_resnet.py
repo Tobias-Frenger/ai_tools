@@ -36,7 +36,7 @@ def inception_residual_block(X, filters):
     return X
 
 def init_model(in_dim, classes):
-    inputs = tf.keras.Input(shape=(128,128,3))
+    inputs = tf.keras.Input(shape=in_dim)
     X = Conv2D(64, 3, 1, padding='same')(inputs)
     X = common_layers(X)
     X = maxPool_layer(X, 3, 3)
