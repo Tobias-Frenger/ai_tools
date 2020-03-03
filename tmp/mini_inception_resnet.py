@@ -20,21 +20,18 @@ def maxPool_layer(X, pool_size, strides):
 def inception_residual_block(X, filters, sc = False):
     if sc==True: 
         shortcut = X
-        pad = 'same'
-    else:
-        pad = 'valid'
     
-    l1 = Conv2D(32, 1, 1, padding= pad)(X)
+    l1 = Conv2D(32, 1, 1, padding = 'same')(X)
     l1 = common_layers(l1)
     
-    l2 = Conv2D(16, 1, 1, padding= pad)(X)
+    l2 = Conv2D(16, 1, 1, padding = 'same')(X)
     l2 = common_layers(l2)
-    l2 = Conv2D(32, 5, 1, padding = pad)(l2)
+    l2 = Conv2D(32, 5, 1, padding = 'same')(l2)
     l2 = common_layers(l2)
     
-    l3 = Conv2D(32, 1, 1, padding= pad)(X)
+    l3 = Conv2D(32, 1, 1, padding = 'same')(X)
     l3 = common_layers(l3)
-    l3 = Conv2D(64, 3, 1, padding = pad)(l3)
+    l3 = Conv2D(64, 3, 1, padding = 'same')(l3)
     l3 = common_layers(l3)
         
     X = tf.keras.layers.concatenate([l1,l2,l3])
